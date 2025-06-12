@@ -1,0 +1,2629 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Civili.id - Layanan Kependudukan Digital</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --button-bg: #2c3e50;
+      --button-color: #ffffff;
+      --container-bg: rgba(232, 232, 232, 0.8);
+      --input-bg: #ffffff;
+      --input-border: #cccccc;
+      --error-color: #e74c3c;
+      --success-color: #2ecc71;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(0,0,0,0.1);
+      --chatbot-bg: #f8f9fa;
+      --chatbot-msg-bg: #e9ecef;
+    }
+
+    body.dark-mode {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+      --button-bg: #3498db;
+      --button-color: #000000;
+      --container-bg: rgba(0,0,0,0.9);
+      --input-bg: #333333;
+      --input-border: #555555;
+      --card-bg: #333333;
+      --card-shadow: rgba(0,0,0,0.3);
+      --chatbot-bg: #2d2d2d;
+      --chatbot-msg-bg: #3d3d3d;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--input-border);
+      background-color: var(--container-bg);
+    }
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo small {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .aksesibilitas {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .aksesibilitas button,
+    .aksesibilitas select {
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      transition: all 0.2s;
+    }
+
+    .aksesibilitas button:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 100px);
+      padding: 2rem 0;
+      backdrop-filter: blur(1.5px);
+    }
+
+    .container-box {
+      background-color: var(--container-bg);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 800px;
+      width: 90%;
+      margin: 1rem auto;
+      transition: all 0.3s ease;
+    }
+
+    .container-box h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1.2rem;
+      color: var(--button-bg);
+    }
+
+    .container-box h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .container-box p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .btn-lanjut, .btn-option, .btn-login, .btn-dokumen {
+      font-size: 1rem;
+      padding: 0.9rem;
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.5rem 0;
+      transition: all 0.3s;
+      width: 100%;
+      font-weight: 600;
+    }
+
+    .btn-lanjut:hover, .btn-option:hover, .btn-login:hover, .btn-dokumen:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .btn-kembali {
+      font-size: 1rem;
+      padding: 0.9rem;
+      background-color: transparent;
+      color: var(--button-bg);
+      border: 2px solid var(--button-bg);
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.5rem 0;
+      transition: all 0.3s;
+      width: 100%;
+      font-weight: 600;
+    }
+
+    .btn-kembali:hover {
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      transform: translateY(-2px);
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.8rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 0.9rem;
+      border: 2px solid var(--input-border);
+      border-radius: 8px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--button-bg);
+      box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.2);
+    }
+
+    .fingerprint-option {
+      margin: 1.8rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      cursor: pointer;
+      color: var(--button-bg);
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .fingerprint-option:hover {
+      transform: scale(1.05);
+    }
+
+    .fingerprint-icon {
+      font-size: 1.8rem;
+    }
+
+    .forgot-password {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .forgot-password a {
+      color: var(--button-bg);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    .version-info {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .error-message {
+      color: var(--error-color);
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      text-align: left;
+      display: none;
+    }
+
+    .success-message {
+      color: var(--success-color);
+      margin: 1rem 0;
+      font-weight: 600;
+    }
+
+    .hidden {
+      position: absolute;
+      left: -9999px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--input-border);
+      background-color: var(--container-bg);
+    }
+
+    /* Dashboard Styles */
+    .profile-section {
+      text-align: left;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px var(--card-shadow);
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-photo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--button-bg);
+    }
+
+    .profile-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .profile-info p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .profile-info strong {
+      color: var(--button-bg);
+    }
+
+    .documents-section {
+      margin-top: 2rem;
+    }
+
+    .document-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .document-card {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px var(--card-shadow);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .document-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .document-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .document-actions {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .no-document {
+      color: var(--text-color);
+      opacity: 0.7;
+      font-style: italic;
+      margin: 1rem 0;
+    }
+
+    .document-image {
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      background-color: var(--input-bg);
+    }
+
+    .create-document-section {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px var(--card-shadow);
+    }
+
+    .create-document-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .create-document-btn {
+      padding: 0.8rem 1.2rem;
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .create-document-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    /* Form dokumen styles */
+    .document-form {
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .upload-area {
+      border: 2px dashed var(--input-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .upload-area:hover {
+      border-color: var(--button-bg);
+      background-color: rgba(44, 62, 80, 0.05);
+    }
+
+    .upload-area input[type="file"] {
+      display: none;
+    }
+
+    .upload-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .preview-image {
+      max-width: 100%;
+      max-height: 200px;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    /* Chatbot styles */
+    .chatbot-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      background-color: var(--chatbot-bg);
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 1000;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      transform: translateY(100%);
+      opacity: 0;
+    }
+
+    .chatbot-container.open {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .chatbot-header {
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .chatbot-messages {
+      height: 300px;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .chatbot-message {
+      margin-bottom: 0.8rem;
+      padding: 0.8rem;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+
+    .chatbot-message.user {
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      margin-left: auto;
+      border-bottom-right-radius: 0;
+    }
+
+    .chatbot-message.bot {
+      background-color: var(--chatbot-msg-bg);
+      margin-right: auto;
+      border-bottom-left-radius: 0;
+    }
+
+    .chatbot-input {
+      display: flex;
+      padding: 0.8rem;
+      border-top: 1px solid var(--input-border);
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      padding: 0.8rem;
+      border: 1px solid var(--input-border);
+      border-radius: 20px;
+      margin-right: 0.5rem;
+    }
+
+    .chatbot-input button {
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .chatbot-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background-color: var(--button-bg);
+      color: var(--button-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 1001;
+    }
+
+    /* Document view styles */
+    .document-view-container {
+      text-align: center;
+    }
+
+    .document-view-image {
+      max-width: 100%;
+      max-height: 400px;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+    }
+
+    /* Signature pad styles */
+    .signature-pad {
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      background-color: white;
+    }
+
+    .signature-clear {
+      background-color: var(--error-color);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+
+    /* Feedback styles */
+    .feedback-options {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feedback-option {
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .feedback-option:hover, .feedback-option.active {
+      background-color: var(--button-bg);
+      color: var(--button-color);
+    }
+
+    .feedback-media-upload {
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      
+      .aksesibilitas {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .container-box {
+        padding: 1.5rem;
+      }
+
+      .profile-info {
+        grid-template-columns: 1fr;
+      }
+
+      .document-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .chatbot-container {
+        width: calc(100% - 40px);
+        right: 20px;
+        left: 20px;
+      }
+    }
+  </style>
+</head>
+<body style="background-image: url('https://i.pinimg.com/736x/78/5a/5d/785a5de90ab6cf41622980267570799b.jpg'); background-size: cover; background-repeat: no-repeat;">
+
+  <header>
+    <div class="logo">Civili.id<br><small>by: kelompok 10</small></div>
+    <div class="aksesibilitas">
+      <label for="bahasa">Bahasa</label>
+      <select id="bahasa" onchange="changeLanguage()">
+        <option value="id">🇮🇩 Indonesia</option>
+        <option value="jv">ꦗꦮ Jawa</option>
+        <option value="su">ᮞᮥᮔ᮪ᮓ Sunda</option>
+      </select>
+      <button onclick="adjustFontSize(1)" title="Perbesar Teks">A+</button>
+      <button onclick="adjustFontSize(-1)" title="Perkecil Teks">A-</button>
+      <button onclick="toggleTheme()" title="Mode Gelap/Terang">🌗</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    
+    <!-- HALAMAN WELCOME -->
+    <div class="container-box" id="welcome-box">
+      <h1 data-lang="id">Selamat Datang di Civili.id</h1>
+      <h1 data-lang="jv" class="hidden">Sugeng Rawuh ing Civili.id</h1>
+      <h1 data-lang="su" class="hidden">Wilujeng Sumping di Civili.id</h1>
+      <p data-lang="id">
+        Layanan digital untuk pengurusan dokumen kependudukan secara online. Nikmati kemudahan mengurus dokumen kependudukan kapan saja, di mana saja.
+      </p>
+      <p data-lang="jv" class="hidden">
+        Layanan digital kanggo ngurus dokumen kependudukan kanthi online. Nikmati gampange ngurus dokumen kependudukan kapan wae, ing ngendi wae.
+      </p>
+      <p data-lang="su" class="hidden">
+        Layanan digital pikeun ngurus dokumen kependudukan sacara online. Ngarasakeun betahna ngurus dokumen kependudukan iraha waé, di mana waé.
+      </p>
+      <button class="btn-lanjut" onclick="goToAccountPage()" data-lang="id">Mulai Sekarang</button>
+      <button class="btn-lanjut hidden" onclick="goToAccountPage()" data-lang="jv">Miwiti Saiki</button>
+      <button class="btn-lanjut hidden" onclick="goToAccountPage()" data-lang="su">Mimitian Ayeuna</button>
+      <div class="sound-controls">
+        <button onclick="speakText()" title="Baca Teks">🔊 <span data-lang="id">Baca</span><span data-lang="jv" class="hidden">Waca</span><span data-lang="su" class="hidden">Maca</span></button>
+        <button onclick="stopSpeaking()" title="Berhenti Membaca">⏹️ <span data-lang="id">Berhenti</span><span data-lang="jv" class="hidden">Mungkasi</span><span data-lang="su" class="hidden">Eureun</span></button>
+      </div>
+    </div>
+
+    <!-- HALAMAN PERTANYAAN AKUN -->
+    <div class="container-box hidden" id="account-box">
+      <h2 data-lang="id">Sudah Memiliki Akun?</h2>
+      <h2 data-lang="jv" class="hidden">Wis Duwe Akun?</h2>
+      <h2 data-lang="su" class="hidden">Geus Gaduh Akun?</h2>
+      <p data-lang="id">Pilih salah satu opsi berikut untuk melanjutkan</p>
+      <p data-lang="jv" class="hidden">Pilih salah siji opsi ing ngisor iki kanggo nerusake</p>
+      <p data-lang="su" class="hidden">Pilih salah sahiji pilihan di handap pikeun nuluykeun</p>
+      <div class="button-group">
+        <button class="btn-option" onclick="goToLoginPage()" data-lang="id">Ya, Saya Punya Akun</button>
+        <button class="btn-option hidden" onclick="goToLoginPage()" data-lang="jv">Ya, Aku Duwe Akun</button>
+        <button class="btn-option hidden" onclick="goToLoginPage()" data-lang="su">Enya, Abdi Gaduh Akun</button>
+        <button class="btn-option" onclick="goToRegisterPage()" data-lang="id">Belum Punya Akun</button>
+        <button class="btn-option hidden" onclick="goToRegisterPage()" data-lang="jv">Durung Duwe Akun</button>
+        <button class="btn-option hidden" onclick="goToRegisterPage()" data-lang="su">Tacan Gaduh Akun</button>
+        <button class="btn-kembali" onclick="goToWelcomePage()" data-lang="id">Kembali</button>
+        <button class="btn-kembali hidden" onclick="goToWelcomePage()" data-lang="jv">Bali</button>
+        <button class="btn-kembali hidden" onclick="goToWelcomePage()" data-lang="su">Balik</button>
+      </div>
+    </div>
+
+    <!-- HALAMAN LOGIN -->
+    <div class="container-box hidden" id="login-box">
+      <h2 data-lang="id">Masuk ke Akun Anda</h2>
+      <h2 data-lang="jv" class="hidden">Mlebet ing Akun Sampeyan</h2>
+      <h2 data-lang="su" class="hidden">Asup ka Akun Anjeun</h2>
+      <p data-lang="id">Silakan masukkan informasi login Anda</p>
+      <p data-lang="jv" class="hidden">Mangga lebokna informasi login sampeyan</p>
+      <p data-lang="su" class="hidden">Mangga lebetkeun inpormasi login anjeun</p>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <label for="birthdate" data-lang="id">Tanggal Lahir</label>
+          <label for="birthdate" data-lang="jv" class="hidden">Tanggal Kelairan</label>
+          <label for="birthdate" data-lang="su" class="hidden">Tanggal Kalahiran</label>
+          <input type="date" id="birthdate" required>
+          <div class="error-message" id="birthdate-error" data-lang="id">Tanggal lahir harus diisi</div>
+          <div class="error-message hidden" id="birthdate-error-jv" data-lang="jv">Tanggal kelairan kudu diisi</div>
+          <div class="error-message hidden" id="birthdate-error-su" data-lang="su">Tanggal kalahiran kedah diisi</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password" data-lang="id">Password</label>
+          <label for="password" data-lang="jv" class="hidden">Sandi</label>
+          <label for="password" data-lang="su" class="hidden">Kata Sandi</label>
+          <input type="password" id="password" required minlength="6">
+          <div class="error-message" id="password-error" data-lang="id">Password harus minimal 6 karakter</div>
+          <div class="error-message hidden" id="password-error-jv" data-lang="jv">Sandi kudu minimal 6 karakter</div>
+          <div class="error-message hidden" id="password-error-su" data-lang="su">Kata sandi kedah minimal 6 karakter</div>
+        </div>
+        
+        <div class="button-group">
+          <button type="submit" class="btn-login" onclick="goToDashboard()" data-lang="id">Masuk</button>
+          <button type="submit" class="btn-login hidden" onclick="goToDashboard()" data-lang="jv">Mlebet</button>
+          <button type="submit" class="btn-login hidden" onclick="goToDashboard()" data-lang="su">Asup</button>
+          <button type="button" class="btn-kembali" onclick="goToAccountPage()" data-lang="id">Kembali</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToAccountPage()" data-lang="jv">Bali</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToAccountPage()" data-lang="su">Balik</button>
+        </div>
+      </form>
+      
+      <div class="fingerprint-option" onclick="loginWithFingerprint()">
+        <div class="fingerprint-icon"><img src="https://static.vecteezy.com/system/resources/previews/015/698/670/original/touch-id-icon-illustration-in-gradient-colors-fingerprint-sign-for-security-interface-png.png" style="width: 24px; height: 24px;" alt="ikon kecil"></div>
+        <div data-lang="id">Gunakan Fingerprint</div>
+        <div class="hidden" data-lang="jv">Gunakake Fingerprint</div>
+        <div class="hidden" data-lang="su">Anggo Fingerprint</div>
+      </div>
+      
+      <div class="forgot-password">
+        <a onclick="goToForgotPasswordPage()" data-lang="id">Lupa Password</a>
+        <a onclick="goToForgotPasswordPage()" class="hidden" data-lang="jv">Lali Sandi</a>
+        <a onclick="goToForgotPasswordPage()" class="hidden" data-lang="su">Poho Kata Sandi</a>
+      </div>
+      
+      <div class="version-info">
+        Versi 1.8.1 - © 2025 Civili.id
+      </div>
+    </div>
+
+    <!-- HALAMAN DAFTAR AKUN -->
+    <div class="container-box hidden" id="register-box">
+      <h2 data-lang="id">Buat Akun Baru</h2>
+      <h2 data-lang="jv" class="hidden">Nggawe Akun Anyar</h2>
+      <h2 data-lang="su" class="hidden">Jieun Akun Anyar</h2>
+      <p data-lang="id">Isi data berikut untuk membuat akun baru</p>
+      <p data-lang="jv" class="hidden">Isi data ing ngisor iki kanggo nggawe akun anyar</p>
+      <p data-lang="su" class="hidden">Eusian data di handap pikeun nyieun akun anyar</p>
+      
+      <form id="register-form">
+        <div class="form-group">
+          <label for="reg-name" data-lang="id">Nama Lengkap</label>
+          <label for="reg-name" data-lang="jv" class="hidden">Jeneng Lengkap</label>
+          <label for="reg-name" data-lang="su" class="hidden">Nami Lengkep</label>
+          <input type="text" id="reg-name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-birthdate" data-lang="id">Tanggal Lahir</label>
+          <label for="reg-birthdate" data-lang="jv" class="hidden">Tanggal Kelairan</label>
+          <label for="reg-birthdate" data-lang="su" class="hidden">Tanggal Kalahiran</label>
+          <input type="date" id="reg-birthdate" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-nik" data-lang="id">NIK</label>
+          <label for="reg-nik" data-lang="jv" class="hidden">NIK</label>
+          <label for="reg-nik" data-lang="su" class="hidden">NIK</label>
+          <input type="text" id="reg-nik" required pattern="[0-9]{16}" title="16 digit angka">
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-email" data-lang="id">Email</label>
+          <label for="reg-email" data-lang="jv" class="hidden">Email</label>
+          <label for="reg-email" data-lang="su" class="hidden">Email</label>
+          <input type="email" id="reg-email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-password" data-lang="id">Buat Password</label>
+          <label for="reg-password" data-lang="jv" class="hidden">Nggawe Sandi</label>
+          <label for="reg-password" data-lang="su" class="hidden">Jieun Kata Sandi</label>
+          <input type="password" id="reg-password" required minlength="6">
+        </div>
+        
+        <div class="form-group">
+          <label for="reg-confirm-password" data-lang="id">Konfirmasi Password</label>
+          <label for="reg-confirm-password" data-lang="jv" class="hidden">Konfirmasi Sandi</label>
+          <label for="reg-confirm-password" data-lang="su" class="hidden">Konfirmasi Kata Sandi</label>
+          <input type="password" id="reg-confirm-password" required minlength="6">
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Daftarkan Sidik Jari</label>
+          <label class="hidden" data-lang="jv">Ndhaptarke Sidik Jari</label>
+          <label class="hidden" data-lang="su">Pendaptaran Sidik Jari</label>
+          <div class="fingerprint-option" onclick="registerFingerprint()">
+            <div class="fingerprint-icon">🖐️</div>
+            <div data-lang="id">Klik untuk mendaftarkan sidik jari</div>
+            <div class="hidden" data-lang="jv">Klik kanggo ndhaftarke sidik jari</div>
+            <div class="hidden" data-lang="su">Klik pikeun ngadaptarkeun sidik jari</div>
+          </div>
+          <input type="hidden" id="fingerprint-registered" value="false">
+        </div>
+        
+        <div class="button-group">
+          <button type="submit" class="btn-login" data-lang="id">Daftar</button>
+          <button type="submit" class="btn-login hidden" data-lang="jv">Ndhaptar</button>
+          <button type="submit" class="btn-login hidden" data-lang="su">Daptar</button>
+          <button type="button" class="btn-kembali" onclick="goToAccountPage()" data-lang="id">Kembali</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToAccountPage()" data-lang="jv">Bali</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToAccountPage()" data-lang="su">Balik</button>
+        </div>
+      </form>
+      
+      <div class="version-info">
+        Versi 1.8.1 - © 2025 Civili.id
+      </div>
+    </div>
+
+    <!-- HALAMAN LUPA PASSWORD -->
+    <div class="container-box hidden" id="forgot-box">
+      <h2 data-lang="id">Lupa Password</h2>
+      <h2 data-lang="jv" class="hidden">Lali Sandi</h2>
+      <h2 data-lang="su" class="hidden">Poho Kata Sandi</h2>
+      <p data-lang="id">Masukkan email atau NIK Anda untuk mereset password</p>
+      <p data-lang="jv" class="hidden">Lebokna email utawa NIK sampeyan kanggo reset sandi</p>
+      <p data-lang="su" class="hidden">Lebetkeun email atawa NIK anjeun pikeun ngareset kata sandi</p>
+      
+      <form id="forgot-form">
+        <div class="form-group">
+          <label for="forgot-email" data-lang="id">Email atau NIK</label>
+          <label for="forgot-email" data-lang="jv" class="hidden">Email utawa NIK</label>
+          <label for="forgot-email" data-lang="su" class="hidden">Email atawa NIK</label>
+          <input type="text" id="forgot-email" required>
+        </div>
+        
+        <div class="button-group">
+          <button type="submit" class="btn-login" data-lang="id">Kirim Link Reset</button>
+          <button type="submit" class="btn-login hidden" data-lang="jv">Kirim Link Reset</button>
+          <button type="submit" class="btn-login hidden" data-lang="su">Kirim Link Reset</button>
+          <button type="button" class="btn-kembali" onclick="goToLoginPage()" data-lang="id">Kembali ke Login</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToLoginPage()" data-lang="jv">Bali menyang Login</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToLoginPage()" data-lang="su">Balik ka Login</button>
+        </div>
+      </form>
+      
+      <div class="version-info">
+        Versi 1.8.1 - © 2025 Civili.id
+      </div>
+    </div>
+
+    <!-- HALAMAN DASHBOARD -->
+    <div class="container-box hidden" id="dashboard-box">
+      <h2 data-lang="id">Dashboard Pengguna</h2>
+      <h2 data-lang="jv" class="hidden">Dashboard Panganggo</h2>
+      <h2 data-lang="su" class="hidden">Dashboard Pamaké</h2>
+      
+      <div class="profile-section">
+        <div class="profile-header">
+          <img id="profile-photo" src="https://via.placeholder.com/150?text=Foto+Profil" alt="Foto Profil" class="profile-photo">
+          <div>
+            <h3 id="profile-name">Faqih Almuwafaq</h3>
+            <p id="profile-nik">NIK: 3273010101010001</p>
+          </div>
+        </div>
+        <div class="profile-info">
+          <div>
+            <p><strong data-lang="id">Tanggal Lahir:</strong> <span id="profile-birthdate">05 Januari 1900</span></p>
+            <p><strong data-lang="id">Email:</strong> <span id="profile-email">faqih@gmail.com</span></p>
+            <p><strong data-lang="id">Alamat:</strong> <span id="profile-address">Jl. Asia Afrika No. 123, Bandung</span></p>
+          </div>
+          <div>
+            <p><strong data-lang="id">Status:</strong> <span id="profile-status">Sudah Verifikasi</span></p>
+            <p><strong data-lang="id">Nomor HP:</strong> <span id="profile-phone">081234567890</span></p>
+            <p><strong data-lang="id">Terakhir Login:</strong> <span id="profile-lastlogin">12 Juni 2025 14:30</span></p>
+          </div>
+        </div>
+        <button class="btn-dokumen" onclick="updateProfile()" data-lang="id">Perbarui Profil</button>
+        <button class="btn-dokumen hidden" onclick="updateProfile()" data-lang="jv">Nganyari Profil</button>
+        <button class="btn-dokumen hidden" onclick="updateProfile()" data-lang="su">Pembaruan Profil</button>
+      </div>
+      
+      <div class="documents-section">
+        <h3 data-lang="id">Dokumen Saya</h3>
+        <h3 data-lang="jv" class="hidden">Dokumen Kula</h3>
+        <h3 data-lang="su" class="hidden">Dokumen Abdi</h3>
+        <div class="document-cards" id="document-cards">
+          <!-- Dokumen akan ditampilkan di sini secara dinamis -->
+        </div>
+      </div>
+      
+      <div class="create-document-section">
+        <h3 data-lang="id">Buat Dokumen Baru</h3>
+        <h3 data-lang="jv" class="hidden">Nggawe Dokumen Anyar</h3>
+        <h3 data-lang="su" class="hidden">Jieun Dokumen Anyar</h3>
+        <p data-lang="id">Pilih dokumen yang ingin Anda buat:</p>
+        <p data-lang="jv" class="hidden">Pilih dokumen sing pengin digawe:</p>
+        <p data-lang="su" class="hidden">Pilih dokumen anu anjeun hoyong jieun:</p>
+        <div class="create-document-options" id="create-document-options">
+          <!-- Opsi dokumen akan ditampilkan di sini secara dinamis -->
+        </div>
+      </div>
+      
+      <div class="button-group">
+        <button class="btn-kembali" onclick="logout()" data-lang="id">Keluar</button>
+        <button class="btn-kembali hidden" onclick="logout()" data-lang="jv">Metu</button>
+        <button class="btn-kembali hidden" onclick="logout()" data-lang="su">Kaluar</button>
+      </div>
+      
+      <div class="version-info">
+        Versi 1.8.1 - © 2025 Civili.id
+      </div>
+    </div>
+
+    <!-- HALAMAN FORM KTP -->
+    <div class="container-box hidden" id="ktp-form-box">
+      <h2 data-lang="id">Formulir Pembuatan KTP</h2>
+      <h2 data-lang="jv" class="hidden">Formulir Nggawe KTP</h2>
+      <h2 data-lang="su" class="hidden">Formulir Nyieun KTP</h2>
+      <p data-lang="id">Isi data berikut untuk membuat Kartu Tanda Penduduk</p>
+      <p data-lang="jv" class="hidden">Isi data ing ngisor iki kanggo nggawe KTP</p>
+      <p data-lang="su" class="hidden">Eusian data di handap pikeun nyieun KTP</p>
+      
+      <form id="ktp-form" class="document-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ktp-nama" data-lang="id">Nama Lengkap</label>
+            <label for="ktp-nama" data-lang="jv" class="hidden">Jeneng Lengkap</label>
+            <label for="ktp-nama" data-lang="su" class="hidden">Nami Lengkep</label>
+            <input type="text" id="ktp-nama" required value="Faqih Almuwafaq">
+          </div>
+          <div class="form-group">
+            <label for="ktp-nik" data-lang="id">NIK</label>
+            <label for="ktp-nik" data-lang="jv" class="hidden">NIK</label>
+            <label for="ktp-nik" data-lang="su" class="hidden">NIK</label>
+            <input type="text" id="ktp-nik" required value="3273010101010001" readonly>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ktp-tempat-lahir" data-lang="id">Tempat Lahir</label>
+            <label for="ktp-tempat-lahir" data-lang="jv" class="hidden">Papan Kelairan</label>
+            <label for="ktp-tempat-lahir" data-lang="su" class="hidden">Tempat Kalahiran</label>
+            <input type="text" id="ktp-tempat-lahir" required value="Jakarta">
+          </div>
+          <div class="form-group">
+            <label for="ktp-tanggal-lahir" data-lang="id">Tanggal Lahir</label>
+            <label for="ktp-tanggal-lahir" data-lang="jv" class="hidden">Tanggal Kelairan</label>
+            <label for="ktp-tanggal-lahir" data-lang="su" class="hidden">Tanggal Kalahiran</label>
+            <input type="date" id="ktp-tanggal-lahir" required value="1990-01-01">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="ktp-alamat" data-lang="id">Alamat Lengkap</label>
+          <label for="ktp-alamat" data-lang="jv" class="hidden">Alamat Lengkap</label>
+          <label for="ktp-alamat" data-lang="su" class="hidden">Alamat Lengkep</label>
+          <textarea id="ktp-alamat" rows="3" required>Jl. Merdeka No. 123, Jakarta</textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ktp-rt" data-lang="id">RT</label>
+            <label for="ktp-rt" data-lang="jv" class="hidden">RT</label>
+            <label for="ktp-rt" data-lang="su" class="hidden">RT</label>
+            <input type="text" id="ktp-rt" required value="001">
+          </div>
+          <div class="form-group">
+            <label for="ktp-rw" data-lang="id">RW</label>
+            <label for="ktp-rw" data-lang="jv" class="hidden">RW</label>
+            <label for="ktp-rw" data-lang="su" class="hidden">RW</label>
+            <input type="text" id="ktp-rw" required value="002">
+          </div>
+          <div class="form-group">
+            <label for="ktp-kelurahan" data-lang="id">Kelurahan/Desa</label>
+            <label for="ktp-kelurahan" data-lang="jv" class="hidden">Kelurahan/Desa</label>
+            <label for="ktp-kelurahan" data-lang="su" class="hidden">Kelurahan/Désa</label>
+            <input type="text" id="ktp-kelurahan" required value="Gambir">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ktp-kecamatan" data-lang="id">Kecamatan</label>
+            <label for="ktp-kecamatan" data-lang="jv" class="hidden">Kecamatan</label>
+            <label for="ktp-kecamatan" data-lang="su" class="hidden">Kacamatan</label>
+            <input type="text" id="ktp-kecamatan" required value="Gambir">
+          </div>
+          <div class="form-group">
+            <label for="ktp-kota" data-lang="id">Kota/Kabupaten</label>
+            <label for="ktp-kota" data-lang="jv" class="hidden">Kota/Kabupaten</label>
+            <label for="ktp-kota" data-lang="su" class="hidden">Kota/Kabupatén</label>
+            <input type="text" id="ktp-kota" required value="Jakarta Pusat">
+          </div>
+          <div class="form-group">
+            <label for="ktp-provinsi" data-lang="id">Provinsi</label>
+            <label for="ktp-provinsi" data-lang="jv" class="hidden">Provinsi</label>
+            <label for="ktp-provinsi" data-lang="su" class="hidden">Propinsi</label>
+            <input type="text" id="ktp-provinsi" required value="DKI Jakarta">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="ktp-agama" data-lang="id">Agama</label>
+          <label for="ktp-agama" data-lang="jv" class="hidden">Agama</label>
+          <label for="ktp-agama" data-lang="su" class="hidden">Agama</label>
+          <select id="ktp-agama" required>
+            <option value="Islam">Islam</option>
+            <option value="Kristen">Kristen</option>
+            <option value="Katolik">Katolik</option>
+            <option value="Hindu">Hindu</option>
+            <option value="Buddha">Buddha</option>
+            <option value="Konghucu">Konghucu</option>
+          </select>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ktp-status" data-lang="id">Status Perkawinan</label>
+            <label for="ktp-status" data-lang="jv" class="hidden">Status Perkawinan</label>
+            <label for="ktp-status" data-lang="su" class="hidden">Status Perkawinan</label>
+            <select id="ktp-status" required>
+              <option value="Belum Kawin">Belum Kawin</option>
+              <option value="Kawin" selected>Kawin</option>
+              <option value="Cerai Hidup">Cerai Hidup</option>
+              <option value="Cerai Mati">Cerai Mati</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ktp-pekerjaan" data-lang="id">Pekerjaan</label>
+            <label for="ktp-pekerjaan" data-lang="jv" class="hidden">Pagawean</label>
+            <label for="ktp-pekerjaan" data-lang="su" class="hidden">Pagawéan</label>
+            <input type="text" id="ktp-pekerjaan" required value="Pegawai Swasta">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="ktp-kewarganegaraan" data-lang="id">Kewarganegaraan</label>
+          <label for="ktp-kewarganegaraan" data-lang="jv" class="hidden">Kawarganegaraan</label>
+          <label for="ktp-kewarganegaraan" data-lang="su" class="hidden">Kawarganagaraan</label>
+          <input type="text" id="ktp-kewarganegaraan" required value="WNI">
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Upload Foto dan Dokumen Pendukung</label>
+          <label class="hidden" data-lang="jv">Upload Foto lan Dokumen Pendukung</label>
+          <label class="hidden" data-lang="su">Upload Foto sareng Dokumen Pendukung</label>
+          <div class="upload-area" onclick="document.getElementById('ktp-upload').click()">
+            <div class="upload-icon">📤</div>
+            <p data-lang="id">Klik untuk mengunggah foto wajah dan tanda tangan</p>
+            <p data-lang="jv" class="hidden">Klik kanggo ngunggah foto rai lan tandha tangan</p>
+            <p data-lang="su" class="hidden">Klik pikeun ngunggah foto raray sareng tanda tangan</p>
+            <p><small data-lang="id">Format: JPG/PNG (maks. 2MB)</small></p>
+            <p><small data-lang="jv" class="hidden">Format: JPG/PNG (maks. 2MB)</small></p>
+            <p><small data-lang="su" class="hidden">Format: JPG/PNG (maks. 2MB)</small></p>
+            <img id="ktp-preview" class="preview-image" alt="Preview">
+          </div>
+          <input type="file" id="ktp-upload" accept="image/*" onchange="previewImage(this, 'ktp-preview')">
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Tanda Tangan Digital</label>
+          <label class="hidden" data-lang="jv">Tandha Tangan Digital</label>
+          <label class="hidden" data-lang="su">Tanda Tangan Digital</label>
+          <div id="ktp-signature-pad" class="signature-pad">
+            <canvas width="400" height="200"></canvas>
+          </div>
+          <button type="button" class="signature-clear" onclick="clearSignature('ktp')" data-lang="id">Hapus Tanda Tangan</button>
+          <button type="button" class="signature-clear hidden" onclick="clearSignature('ktp')" data-lang="jv">Busek Tandha Tangan</button>
+          <button type="button" class="signature-clear hidden" onclick="clearSignature('ktp')" data-lang="su">Hapus Tanda Tangan</button>
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Cetak dan kirim dokumen fisik ke alamat saya <input type="checkbox" id="ktp-delivery" checked></label>
+          <label class="hidden" data-lang="jv">Kirim dokumen fisik menyang alamat kula <input type="checkbox" id="ktp-delivery" checked></label>
+          <label class="hidden" data-lang="su">Kirim dokumen fisik ka alamat abdi <input type="checkbox" id="ktp-delivery" checked></label>
+        </div>
+        
+        <div class="button-group">
+          <button type="submit" class="btn-dokumen" data-lang="id">Ajukan Pembuatan KTP</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="jv">Ajokake Pembuatan KTP</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="su">Ajukeun Pembuatan KTP</button>
+          <button type="button" class="btn-kembali" onclick="goToDashboard()" data-lang="id">Kembali ke Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="jv">Bali menyang Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="su">Balik ka Dashboard</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- HALAMAN FORM KK -->
+    <div class="container-box hidden" id="kk-form-box">
+      <h2 data-lang="id">Formulir Pembuatan Kartu Keluarga</h2>
+      <h2 data-lang="jv" class="hidden">Formulir Nggawe Kartu Keluarga</h2>
+      <h2 data-lang="su" class="hidden">Formulir Nyieun Kartu Kulawarga</h2>
+      <p data-lang="id">Isi data berikut untuk membuat Kartu Keluarga</p>
+      <p data-lang="jv" class="hidden">Isi data ing ngisor iki kanggo nggawe Kartu Keluarga</p>
+      <p data-lang="su" class="hidden">Eusian data di handap pikeun nyieun Kartu Kulawarga</p>
+      
+      <form id="kk-form" class="document-form">
+        <div class="form-group">
+          <label for="kk-nik-kepala" data-lang="id">NIK Kepala Keluarga</label>
+          <label for="kk-nik-kepala" data-lang="jv" class="hidden">NIK Kepala Keluarga</label>
+          <label for="kk-nik-kepala" data-lang="su" class="hidden">NIK Kepala Kulawarga</label>
+          <input type="text" id="kk-nik-kepala" required value="3273010101010001" readonly>
+        </div>
+        
+        <div class="form-group">
+          <label for="kk-nama-kepala" data-lang="id">Nama Kepala Keluarga</label>
+          <label for="kk-nama-kepala" data-lang="jv" class="hidden">Jeneng Kepala Keluarga</label>
+          <label for="kk-nama-kepala" data-lang="su" class="hidden">Nami Kepala Kulawarga</label>
+          <input type="text" id="kk-nama-kepala" required value="Faqih Almuwafaq">
+        </div>
+        
+        <div class="form-group">
+          <label for="kk-alamat" data-lang="id">Alamat Lengkap</label>
+          <label for="kk-alamat" data-lang="jv" class="hidden">Alamat Lengkap</label>
+          <label for="kk-alamat" data-lang="su" class="hidden">Alamat Lengkep</label>
+          <textarea id="kk-alamat" rows="3" required>Jl. Merdeka No. 123, Jakarta</textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="kk-rt" data-lang="id">RT</label>
+            <label for="kk-rt" data-lang="jv" class="hidden">RT</label>
+            <label for="kk-rt" data-lang="su" class="hidden">RT</label>
+            <input type="text" id="kk-rt" required value="001">
+          </div>
+          <div class="form-group">
+            <label for="kk-rw" data-lang="id">RW</label>
+            <label for="kk-rw" data-lang="jv" class="hidden">RW</label>
+            <label for="kk-rw" data-lang="su" class="hidden">RW</label>
+            <input type="text" id="kk-rw" required value="002">
+          </div>
+          <div class="form-group">
+            <label for="kk-kodepos" data-lang="id">Kode Pos</label>
+            <label for="kk-kodepos" data-lang="jv" class="hidden">Kode Pos</label>
+            <label for="kk-kodepos" data-lang="su" class="hidden">Kode Pos</label>
+            <input type="text" id="kk-kodepos" required value="10110">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="kk-kelurahan" data-lang="id">Kelurahan/Desa</label>
+            <label for="kk-kelurahan" data-lang="jv" class="hidden">Kelurahan/Desa</label>
+            <label for="kk-kelurahan" data-lang="su" class="hidden">Kelurahan/Désa</label>
+            <input type="text" id="kk-kelurahan" required value="Gambir">
+          </div>
+          <div class="form-group">
+            <label for="kk-kecamatan" data-lang="id">Kecamatan</label>
+            <label for="kk-kecamatan" data-lang="jv" class="hidden">Kecamatan</label>
+            <label for="kk-kecamatan" data-lang="su" class="hidden">Kacamatan</label>
+            <input type="text" id="kk-kecamatan" required value="Gambir">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="kk-kota" data-lang="id">Kota/Kabupaten</label>
+            <label for="kk-kota" data-lang="jv" class="hidden">Kota/Kabupaten</label>
+            <label for="kk-kota" data-lang="su" class="hidden">Kota/Kabupatén</label>
+            <input type="text" id="kk-kota" required value="Jakarta Pusat">
+          </div>
+          <div class="form-group">
+            <label for="kk-provinsi" data-lang="id">Provinsi</label>
+            <label for="kk-provinsi" data-lang="jv" class="hidden">Provinsi</label>
+            <label for="kk-provinsi" data-lang="su" class="hidden">Propinsi</label>
+            <input type="text" id="kk-provinsi" required value="DKI Jakarta">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Anggota Keluarga</label>
+          <label class="hidden" data-lang="jv">Anggota Keluarga</label>
+          <label class="hidden" data-lang="su">Anggota Kulawarga</label>
+          <div id="kk-anggota-list">
+            <!-- Anggota keluarga akan ditambahkan di sini -->
+          </div>
+          <button type="button" class="btn-dokumen" onclick="addAnggotaKeluarga()" style="margin-top: 1rem;" data-lang="id">+ Tambah Anggota Keluarga</button>
+          <button type="button" class="btn-dokumen hidden" onclick="addAnggotaKeluarga()" style="margin-top: 1rem;" data-lang="jv">+ Tambah Anggota Keluarga</button>
+          <button type="button" class="btn-dokumen hidden" onclick="addAnggotaKeluarga()" style="margin-top: 1rem;" data-lang="su">+ Tambah Anggota Kulawarga</button>
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Upload Dokumen Pendukung</label>
+          <label class="hidden" data-lang="jv">Upload Dokumen Pendukung</label>
+          <label class="hidden" data-lang="su">Upload Dokumen Pendukung</label>
+          <div class="upload-area" onclick="document.getElementById('kk-upload').click()">
+            <div class="upload-icon">📤</div>
+            <p data-lang="id">Klik untuk mengunggah dokumen pendukung</p>
+            <p data-lang="jv" class="hidden">Klik kanggo ngunggah dokumen pendukung</p>
+            <p data-lang="su" class="hidden">Klik pikeun ngunggah dokumen pendukung</p>
+            <p><small data-lang="id">Format: PDF/JPG/PNG (maks. 5MB)</small></p>
+            <p><small data-lang="jv" class="hidden">Format: PDF/JPG/PNG (maks. 5MB)</small></p>
+            <p><small data-lang="su" class="hidden">Format: PDF/JPG/PNG (maks. 5MB)</small></p>
+            <img id="kk-preview" class="preview-image" alt="Preview">
+          </div>
+          <input type="file" id="kk-upload" accept="image/*,application/pdf" onchange="previewImage(this, 'kk-preview')">
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Tanda Tangan Digital</label>
+          <label class="hidden" data-lang="jv">Tandha Tangan Digital</label>
+          <label class="hidden" data-lang="su">Tanda Tangan Digital</label>
+          <div id="kk-signature-pad" class="signature-pad">
+            <canvas width="400" height="200"></canvas>
+          </div>
+          <button type="button" class="signature-clear" onclick="clearSignature('kk')" data-lang="id">Hapus Tanda Tangan</button>
+          <button type="button" class="signature-clear hidden" onclick="clearSignature('kk')" data-lang="jv">Busek Tandha Tangan</button>
+          <button type="button" class="signature-clear hidden" onclick="clearSignature('kk')" data-lang="su">Hapus Tanda Tangan</button>
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Cetak dan kirim dokumen fisik ke alamat saya <input type="checkbox" id="ktp-delivery" checked></label>
+          <label class="hidden" data-lang="jv">Kirim dokumen fisik menyang alamat kula <input type="checkbox" id="ktp-delivery" checked></label>
+          <label class="hidden" data-lang="su">Kirim dokumen fisik ka alamat abdi <input type="checkbox" id="ktp-delivery" checked></label>
+        </div>
+        
+        <div class="button-group">
+          <button type="submit" class="btn-dokumen" data-lang="id">Ajukan Pembuatan KK</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="jv">Ajokake Pembuatan KK</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="su">Ajukeun Pembuatan KK</button>
+          <button type="button" class="btn-kembali" onclick="goToDashboard()" data-lang="id">Kembali ke Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="jv">Bali menyang Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="su">Balik ka Dashboard</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- HALAMAN FORM AKTA -->
+    <div class="container-box hidden" id="akta-form-box">
+      <h2 data-lang="id">Formulir Pembuatan Akta Kelahiran</h2>
+      <h2 data-lang="jv" class="hidden">Formulir Nggawe Akta Kelairan</h2>
+      <h2 data-lang="su" class="hidden">Formulir Nyieun Akta Kalahiran</h2>
+      <p data-lang="id">Isi data berikut untuk membuat Akta Kelahiran</p>
+      <p data-lang="jv" class="hidden">Isi data ing ngisor iki kanggo nggawe Akta Kelairan</p>
+      <p data-lang="su" class="hidden">Eusian data di handap pikeun nyieun Akta Kalahiran</p>
+      
+      <form id="akta-form" class="document-form">
+        <div class="form-group">
+          <label for="akta-nama" data-lang="id">Nama Lengkap</label>
+          <label for="akta-nama" data-lang="jv" class="hidden">Jeneng Lengkap</label>
+          <label for="akta-nama" data-lang="su" class="hidden">Nami Lengkep</label>
+          <input type="text" id="akta-nama" required>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="akta-jenis-kelamin" data-lang="id">Jenis Kelamin</label>
+            <label for="akta-jenis-kelamin" data-lang="jv" class="hidden">Jenis Kelamin</label>
+            <label for="akta-jenis-kelamin" data-lang="su" class="hidden">Jenis Kelamin</label>
+            <select id="akta-jenis-kelamin" required>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="akta-tempat-lahir" data-lang="id">Tempat Lahir</label>
+            <label for="akta-tempat-lahir" data-lang="jv" class="hidden">Papan Kelairan</label>
+            <label for="akta-tempat-lahir" data-lang="su" class="hidden">Tempat Kalahiran</label>
+            <input type="text" id="akta-tempat-lahir" required>
+          </div>
+          <div class="form-group">
+            <label for="akta-tanggal-lahir" data-lang="id">Tanggal Lahir</label>
+            <label for="akta-tanggal-lahir" data-lang="jv" class="hidden">Tanggal Kelairan</label>
+            <label for="akta-tanggal-lahir" data-lang="su" class="hidden">Tanggal Kalahiran</label>
+            <input type="date" id="akta-tanggal-lahir" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="akta-waktu-lahir" data-lang="id">Waktu Kelahiran</label>
+          <label for="akta-waktu-lahir" data-lang="jv" class="hidden">Wektu Kelairan</label>
+          <label for="akta-waktu-lahir" data-lang="su" class="hidden">Waktu Kalahiran</label>
+          <input type="time" id="akta-waktu-lahir" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="akta-berat" data-lang="id">Berat Badan (kg)</label>
+          <label for="akta-berat" data-lang="jv" class="hidden">Bobot Badan (kg)</label>
+          <label for="akta-berat" data-lang="su" class="hidden">Beurat Badan (kg)</label>
+          <input type="number" id="akta-berat" step="0.1" min="1" max="10" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="akta-panjang" data-lang="id">Panjang Badan (cm)</label>
+          <label for="akta-panjang" data-lang="jv" class="hidden">Dawa Badan (cm)</label>
+          <label for="akta-panjang" data-lang="su" class="hidden">Panjang Badan (cm)</label>
+          <input type="number" id="akta-panjang" min="30" max="70" required>
+        </div>
+        
+        <h4 data-lang="id">Data Orang Tua</h4>
+        <h4 data-lang="jv" class="hidden">Data Wong Tua</h4>
+        <h4 data-lang="su" class="hidden">Data Kolot</h4>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="akta-nama-ayah" data-lang="id">Nama Ayah</label>
+            <label for="akta-nama-ayah" data-lang="jv" class="hidden">Jeneng Bapak</label>
+            <label for="akta-nama-ayah" data-lang="su" class="hidden">Nami Bapa</label>
+            <input type="text" id="akta-nama-ayah" required>
+          </div>
+          <div class="form-group">
+            <label for="akta-nik-ayah" data-lang="id">NIK Ayah</label>
+            <label for="akta-nik-ayah" data-lang="jv" class="hidden">NIK Bapak</label>
+            <label for="akta-nik-ayah" data-lang="su" class="hidden">NIK Bapa</label>
+            <input type="text" id="akta-nik-ayah" required pattern="[0-9]{16}" title="16 digit angka">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="akta-nama-ibu" data-lang="id">Nama Ibu</label>
+            <label for="akta-nama-ibu" data-lang="jv" class="hidden">Jeneng Ibu</label>
+            <label for="akta-nama-ibu" data-lang="su" class="hidden">Nami Indung</label>
+            <input type="text" id="akta-nama-ibu" required>
+          </div>
+          <div class="form-group">
+            <label for="akta-nik-ibu" data-lang="id">NIK Ibu</label>
+            <label for="akta-nik-ibu" data-lang="jv" class="hidden">NIK Ibu</label>
+            <label for="akta-nik-ibu" data-lang="su" class="hidden">NIK Indung</label>
+            <input type="text" id="akta-nik-ibu" required pattern="[0-9]{16}" title="16 digit angka">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="akta-alamat" data-lang="id">Alamat Orang Tua</label>
+          <label for="akta-alamat" data-lang="jv" class="hidden">Alamat Wong Tua</label>
+          <label for="akta-alamat" data-lang="su" class="hidden">Alamat Kolot</label>
+          <textarea id="akta-alamat" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Upload Dokumen Pendukung</label>
+          <label class="hidden" data-lang="jv">Upload Dokumen Pendukung</label>
+          <label class="hidden" data-lang="su">Upload Dokumen Pendukung</label>
+          <div class="upload-area" onclick="document.getElementById('akta-upload').click()">
+            <div class="upload-icon">📤</div>
+            <p data-lang="id">Klik untuk mengunggah surat keterangan lahir dan dokumen pendukung</p>
+            <p data-lang="jv" class="hidden">Klik kanggo ngunggah surat keterangan lair lan dokumen pendukung</p>
+            <p data-lang="su" class="hidden">Klik pikeun ngunggah surat keterangan lahir sareng dokumen pendukung</p>
+            <p><small data-lang="id">Format: PDF/JPG/PNG (maks. 5MB)</small></p>
+            <p><small data-lang="jv" class="hidden">Format: PDF/JPG/PNG (maks. 5MB)</small></p>
+            <p><small data-lang="su" class="hidden">Format: PDF/JPG/PNG (maks. 5MB)</small></p>
+            <img id="akta-preview" class="preview-image" alt="Preview">
+          </div>
+          <input type="file" id="akta-upload" accept="image/*,application/pdf" onchange="previewImage(this, 'akta-preview')">
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Tanda Tangan Digital</label>
+          <label class="hidden" data-lang="jv">Tandha Tangan Digital</label>
+          <label class="hidden" data-lang="su">Tanda Tangan Digital</label>
+          <div id="akta-signature-pad" class="signature-pad">
+            <canvas width="400" height="200"></canvas>
+          </div>
+          <button type="button" class="signature-clear" onclick="clearSignature('akta')" data-lang="id">Hapus Tanda Tangan</button>
+          <button type="button" class="signature-clear hidden" onclick="clearSignature('akta')" data-lang="jv">Busek Tandha Tangan</button>
+          <button type="button" class="signature-clear hidden" onclick="clearSignature('akta')" data-lang="su">Hapus Tanda Tangan</button>
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Cetak dan kirim dokumen fisik ke alamat saya <input type="checkbox" id="ktp-delivery" checked></label>
+          <label class="hidden" data-lang="jv">Kirim dokumen fisik menyang alamat kula <input type="checkbox" id="ktp-delivery" checked></label>
+          <label class="hidden" data-lang="su">Kirim dokumen fisik ka alamat abdi <input type="checkbox" id="ktp-delivery" checked></label>
+        </div>
+        
+        <div class="button-group">
+          <button type="submit" class="btn-dokumen" data-lang="id">Ajukan Pembuatan Akta</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="jv">Ajokake Pembuatan Akta</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="su">Ajukeun Pembuatan Akta</button>
+          <button type="button" class="btn-kembali" onclick="goToDashboard()" data-lang="id">Kembali ke Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="jv">Bali menyang Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="su">Balik ka Dashboard</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- HALAMAN UPDATE PROFILE -->
+    <div class="container-box hidden" id="profile-form-box">
+      <h2 data-lang="id">Perbarui Profil</h2>
+      <h2 data-lang="jv" class="hidden">Nganyari Profil</h2>
+      <h2 data-lang="su" class="hidden">Pembaruan Profil</h2>
+      <p data-lang="id">Perbarui data pribadi Anda</p>
+      <p data-lang="jv" class="hidden">Nganyari data pribadi sampeyan</p>
+      <p data-lang="su" class="hidden">Pembaruan data pribadi anjeun</p>
+      
+      <form id="profile-form" class="document-form">
+        <div class="form-group">
+          <label for="profile-update-nama" data-lang="id">Nama Lengkap</label>
+          <label for="profile-update-nama" data-lang="jv" class="hidden">Jeneng Lengkap</label>
+          <label for="profile-update-nama" data-lang="su" class="hidden">Nami Lengkep</label>
+          <input type="text" id="profile-update-nama" required value="Faqih Almuwafaq">
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-update-nik" data-lang="id">NIK</label>
+            <label for="profile-update-nik" data-lang="jv" class="hidden">NIK</label>
+            <label for="profile-update-nik" data-lang="su" class="hidden">NIK</label>
+            <input type="text" id="profile-update-nik" required value="3273010101010001" readonly>
+          </div>
+          <div class="form-group">
+            <label for="profile-update-tanggal-lahir" data-lang="id">Tanggal Lahir</label>
+            <label for="profile-update-tanggal-lahir" data-lang="jv" class="hidden">Tanggal Kelairan</label>
+            <label for="profile-update-tanggal-lahir" data-lang="su" class="hidden">Tanggal Kalahiran</label>
+            <input type="date" id="profile-update-tanggal-lahir" required value="1990-01-01">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="profile-update-email" data-lang="id">Email</label>
+          <label for="profile-update-email" data-lang="jv" class="hidden">Email</label>
+          <label for="profile-update-email" data-lang="su" class="hidden">Email</label>
+          <input type="email" id="profile-update-email" required value="ahmad.budiman@example.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="profile-update-phone" data-lang="id">Nomor HP</label>
+          <label for="profile-update-phone" data-lang="jv" class="hidden">Nomor HP</label>
+          <label for="profile-update-phone" data-lang="su" class="hidden">Nomor HP</label>
+          <input type="tel" id="profile-update-phone" required value="081234567890">
+        </div>
+        
+        <div class="form-group">
+          <label for="profile-update-alamat" data-lang="id">Alamat Lengkap</label>
+          <label for="profile-update-alamat" data-lang="jv" class="hidden">Alamat Lengkap</label>
+          <label for="profile-update-alamat" data-lang="su" class="hidden">Alamat Lengkep</label>
+          <textarea id="profile-update-alamat" rows="3" required>Jl. Merdeka No. 123, Jakarta</textarea>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-update-rt" data-lang="id">RT</label>
+            <label for="profile-update-rt" data-lang="jv" class="hidden">RT</label>
+            <label for="profile-update-rt" data-lang="su" class="hidden">RT</label>
+            <input type="text" id="profile-update-rt" required value="001">
+          </div>
+          <div class="form-group">
+            <label for="profile-update-rw" data-lang="id">RW</label>
+            <label for="profile-update-rw" data-lang="jv" class="hidden">RW</label>
+            <label for="profile-update-rw" data-lang="su" class="hidden">RW</label>
+            <input type="text" id="profile-update-rw" required value="002">
+          </div>
+          <div class="form-group">
+            <label for="profile-update-kodepos" data-lang="id">Kode Pos</label>
+            <label for="profile-update-kodepos" data-lang="jv" class="hidden">Kode Pos</label>
+            <label for="profile-update-kodepos" data-lang="su" class="hidden">Kode Pos</label>
+            <input type="text" id="profile-update-kodepos" required value="10110">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-update-kelurahan" data-lang="id">Kelurahan/Desa</label>
+            <label for="profile-update-kelurahan" data-lang="jv" class="hidden">Kelurahan/Desa</label>
+            <label for="profile-update-kelurahan" data-lang="su" class="hidden">Kelurahan/Désa</label>
+            <input type="text" id="profile-update-kelurahan" required value="Gambir">
+          </div>
+          <div class="form-group">
+            <label for="profile-update-kecamatan" data-lang="id">Kecamatan</label>
+            <label for="profile-update-kecamatan" data-lang="jv" class="hidden">Kecamatan</label>
+            <label for="profile-update-kecamatan" data-lang="su" class="hidden">Kacamatan</label>
+            <input type="text" id="profile-update-kecamatan" required value="Gambir">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profile-update-kota" data-lang="id">Kota/Kabupaten</label>
+            <label for="profile-update-kota" data-lang="jv" class="hidden">Kota/Kabupaten</label>
+            <label for="profile-update-kota" data-lang="su" class="hidden">Kota/Kabupatén</label>
+            <input type="text" id="profile-update-kota" required value="Jakarta Pusat">
+          </div>
+          <div class="form-group">
+            <label for="profile-update-provinsi" data-lang="id">Provinsi</label>
+            <label for="profile-update-provinsi" data-lang="jv" class="hidden">Provinsi</label>
+            <label for="profile-update-provinsi" data-lang="su" class="hidden">Propinsi</label>
+            <input type="text" id="profile-update-provinsi" required value="DKI Jakarta">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Upload Foto Profil</label>
+          <label class="hidden" data-lang="jv">Upload Foto Profil</label>
+          <label class="hidden" data-lang="su">Upload Foto Profil</label>
+          <div class="upload-area" onclick="document.getElementById('profile-upload').click()">
+            <div class="upload-icon">📤</div>
+            <p data-lang="id">Klik untuk mengunggah foto profil terbaru</p>
+            <p data-lang="jv" class="hidden">Klik kanggo ngunggah foto profil anyar</p>
+            <p data-lang="su" class="hidden">Klik pikeun ngunggah foto profil anyar</p>
+            <p><small data-lang="id">Format: JPG/PNG (maks. 2MB)</small></p>
+            <p><small data-lang="jv" class="hidden">Format: JPG/PNG (maks. 2MB)</small></p>
+            <p><small data-lang="su" class="hidden">Format: JPG/PNG (maks. 2MB)</small></p>
+            <img id="profile-preview" class="preview-image" alt="Preview">
+          </div>
+          <input type="file" id="profile-upload" accept="image/*" onchange="previewImage(this, 'profile-preview')">
+        </div>
+        
+        <div class="form-group">
+          <label for="profile-update-password" data-lang="id">Password Baru (opsional)</label>
+          <label for="profile-update-password" data-lang="jv" class="hidden">Sandi Anyar (opsional)</label>
+          <label for="profile-update-password" data-lang="su" class="hidden">Kata Sandi Anyar (opsional)</label>
+          <input type="password" id="profile-update-password" minlength="6">
+        </div>
+        
+        <div class="form-group">
+          <label for="profile-update-confirm-password" data-lang="id">Konfirmasi Password Baru</label>
+          <label for="profile-update-confirm-password" data-lang="jv" class="hidden">Konfirmasi Sandi Anyar</label>
+          <label for="profile-update-confirm-password" data-lang="su" class="hidden">Konfirmasi Kata Sandi Anyar</label>
+          <input type="password" id="profile-update-confirm-password" minlength="6">
+        </div>
+        
+        <div class="button-group">
+          <button type="submit" class="btn-dokumen" data-lang="id">Simpan Perubahan</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="jv">Simpen Owah-owahan</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="su">Simpen Parobihan</button>
+          <button type="button" class="btn-kembali" onclick="goToDashboard()" data-lang="id">Kembali ke Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="jv">Bali menyang Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="su">Balik ka Dashboard</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- HALAMAN LIHAT DOKUMEN -->
+    <div class="container-box hidden" id="document-view-box">
+      <div class="document-view-container">
+        <h2 id="document-view-title">Kartu Tanda Penduduk</h2>
+        <img id="document-view-image" class="document-view-image" src="" alt="Dokumen">
+        <div id="document-view-status" class="success-message"></div>
+        <div class="button-group">
+          <button class="btn-dokumen" onclick="downloadDocument()" data-lang="id">Unduh Dokumen</button>
+          <button class="btn-dokumen hidden" onclick="downloadDocument()" data-lang="jv">Unduh Dokumen</button>
+          <button class="btn-dokumen hidden" onclick="downloadDocument()" data-lang="su">Unduh Dokumen</button>
+          <button class="btn-kembali" onclick="goToDashboard()" data-lang="id">Kembali ke Dashboard</button>
+          <button class="btn-kembali hidden" onclick="goToDashboard()" data-lang="jv">Bali menyang Dashboard</button>
+          <button class="btn-kembali hidden" onclick="goToDashboard()" data-lang="su">Balik ka Dashboard</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HALAMAN FEEDBACK -->
+    <div class="container-box hidden" id="feedback-box">
+      <h2 data-lang="id">Kirim Masukan</h2>
+      <h2 data-lang="jv" class="hidden">Kirim Masukan</h2>
+      <h2 data-lang="su" class="hidden">Kirim Masukan</h2>
+      <p data-lang="id">Berikan masukan Anda untuk membantu kami meningkatkan layanan</p>
+      <p data-lang="jv" class="hidden">Wenehi masukan sampeyan kanggo mbantu kita ningkatake layanan</p>
+      <p data-lang="su" class="hidden">Pasihan masukan anjeun pikeun ngabantosan kami ningkatkeun jasa</p>
+      
+      <form id="feedback-form">
+        <div class="form-group">
+          <label data-lang="id">Jenis Masukan</label>
+          <label class="hidden" data-lang="jv">Jenis Masukan</label>
+          <label class="hidden" data-lang="su">Jenis Masukan</label>
+          <div class="feedback-options">
+            <div class="feedback-option active" onclick="selectFeedbackType(this, 'saran')" data-lang="id">Saran</div>
+            <div class="feedback-option" onclick="selectFeedbackType(this, 'laporan')" data-lang="id">Laporan Kendala</div>
+            <div class="feedback-option" onclick="selectFeedbackType(this, 'pujian')" data-lang="id">Pujian</div>
+          </div>
+          <input type="hidden" id="feedback-type" value="saran">
+        </div>
+        
+        <div class="form-group">
+          <label for="feedback-message" data-lang="id">Pesan</label>
+          <label for="feedback-message" data-lang="jv" class="hidden">Pesen</label>
+          <label for="feedback-message" data-lang="su" class="hidden">Pesen</label>
+          <textarea id="feedback-message" rows="5" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label data-lang="id">Lampirkan Media (opsional)</label>
+          <label class="hidden" data-lang="jv">Lampirna Media (opsional)</label>
+          <label class="hidden" data-lang="su">Lampirkeun Media (opsional)</label>
+          <div class="feedback-media-upload">
+            <div class="upload-area" onclick="document.getElementById('feedback-media').click()">
+              <div class="upload-icon">📤</div>
+              <p data-lang="id">Klik untuk mengunggah foto/screenshot atau rekam audio</p>
+              <p data-lang="jv" class="hidden">Klik kanggo ngunggah foto/screenshot utawa rekam audio</p>
+              <p data-lang="su" class="hidden">Klik pikeun ngunggah foto/screenshot atanapi rekam audio</p>
+              <p><small data-lang="id">Format: JPG/PNG/MP3 (maks. 5MB)</small></p>
+              <p><small data-lang="jv" class="hidden">Format: JPG/PNG/MP3 (maks. 5MB)</small></p>
+              <p><small data-lang="su" class="hidden">Format: JPG/PNG/MP3 (maks. 5MB)</small></p>
+              <img id="feedback-preview" class="preview-image" alt="Preview">
+              <audio id="feedback-audio" controls class="hidden" style="margin-top: 1rem;"></audio>
+            </div>
+            <input type="file" id="feedback-media" accept="image/*,audio/*" onchange="previewFeedbackMedia(this)">
+            <button type="button" class="btn-kembali" onclick="recordAudio()" style="margin-top: 0.5rem;" data-lang="id">Rekam Audio</button>
+            <button type="button" class="btn-kembali hidden" onclick="recordAudio()" style="margin-top: 0.5rem;" data-lang="jv">Rekam Audio</button>
+            <button type="button" class="btn-kembali hidden" onclick="recordAudio()" style="margin-top: 0.5rem;" data-lang="su">Rekam Audio</button>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button type="submit" class="btn-dokumen" data-lang="id">Kirim Masukan</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="jv">Kirim Masukan</button>
+          <button type="submit" class="btn-dokumen hidden" data-lang="su">Kirim Masukan</button>
+          <button type="button" class="btn-kembali" onclick="goToDashboard()" data-lang="id">Kembali ke Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="jv">Bali menyang Dashboard</button>
+          <button type="button" class="btn-kembali hidden" onclick="goToDashboard()" data-lang="su">Balik ka Dashboard</button>
+        </div>
+      </form>
+    </div>
+
+  </main>
+
+  <!-- CHATBOT TOGGLE -->
+  <div class="chatbot-toggle" onclick="toggleChatbot()">
+    💬
+  </div>
+
+  <!-- CHATBOT CONTAINER -->
+  <div class="chatbot-container" id="chatbot-container">
+    <div class="chatbot-header" onclick="toggleChatbot()">
+      <h3 data-lang="id">Layanan Bantuan</h3>
+      <h3 class="hidden" data-lang="jv">Layanan Pitulung</h3>
+      <h3 class="hidden" data-lang="su">Layanan Bantuan</h3>
+      <span>×</span>
+    </div>
+    <div class="chatbot-messages" id="chatbot-messages">
+      <div class="chatbot-message bot" data-lang="id">Halo! Saya adalah asisten digital Civili.id. Ada yang bisa saya bantu?</div>
+      <div class="chatbot-message bot hidden" data-lang="jv">Halo! Aku asisten digital Civili.id. Ana sing bisa aku bantu?</div>
+      <div class="chatbot-message bot hidden" data-lang="su">Halo! Abdi asisten digital Civili.id. Aya anu tiasa abdi bantosan?</div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatbot-input" placeholder="Ketik pesan Anda..." data-lang="id">
+      <input type="text" id="chatbot-input-jv" class="hidden" placeholder="Ketik pesen sampeyan..." data-lang="jv">
+      <input type="text" id="chatbot-input-su" class="hidden" placeholder="Ketik pesen anjeun..." data-lang="su">
+      <button onclick="sendChatbotMessage()">➤</button>
+    </div>
+  </div>
+
+  <footer>
+    Layanan Kependudukan Digital - Civili.id © 2025
+  </footer>
+
+  <!-- Signature Pad Library -->
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+  <script>
+    // Data dokumen pengguna (simulasi)
+    const userDocuments = {
+      'KTP': {
+        icon: '🪪',
+        image: 'https://png.pngtree.com/png-clipart/20230527/original/pngtree-indonesian-identity-card-illustration-png-image_9171687.png',
+        date: '12 Februari 2020',
+        status: 'Aktif'
+      },
+      'KK': {
+        icon: '🏠',
+        image: 'https://png.pngtree.com/png-clipart/20230916/original/pngtree-indonesian-family-card-vector-png-image_12257531.png',
+        date: '5 Maret 2018',
+        status: 'Aktif'
+      },
+      'AKTA PRIBADI': {
+        icon: '👤',
+        image: 'https://disdukcapil.acehbaratkab.go.id/media/2020.06/birth_certificate.jpg',
+        date: '5 Maret 2004',
+        status: 'Aktif'
+      }
+      // AKTA KELAHIRANsengaja tidak dimasukkan untuk menunjukkan dokumen yang belum dimiliki
+    };
+
+    // Semua jenis dokumen yang tersedia
+    const allDocumentTypes = [
+      { type: 'KTP', name: 'Kartu Tanda Penduduk', icon: '🪪' },
+      { type: 'KK', name: 'Kartu Keluarga', icon: '🏠' },
+      { type: 'AKTA KELAHIRAN', name: 'Akta Kelahiran', icon: '👶' },
+      { type: 'AKTA PRIBADI', name: 'Akta Pribadi', icon: '👤' }
+    ];
+
+    // Signature pads
+    let signaturePads = {
+      ktp: null,
+      kk: null,
+      akta: null
+    };
+
+    // Chatbot questions and answers
+    const chatbotData = {
+      'id': [
+        { question: 'cara buat ktp', answer: 'Untuk membuat KTP baru, silakan pilih opsi "Buat Dokumen Baru" di dashboard, lalu pilih "Kartu Tanda Penduduk". Isi formulir yang muncul dan upload dokumen yang diperlukan.' },
+        { question: 'lupa password', answer: 'Jika lupa password, Anda bisa klik "Lupa Password" di halaman login. Masukkan email atau NIK Anda, dan kami akan mengirim link reset password ke email Anda.' },
+        { question: 'status dokumen', answer: 'Untuk mengecek status dokumen, buka bagian "Dokumen Saya" di dashboard. Status akan menunjukkan apakah dokumen dalam proses, selesai, atau ada masalah.' },
+        { question: 'perbarui data', answer: 'Untuk memperbarui data, klik "Perbarui Profil" di dashboard. Anda bisa mengubah informasi pribadi dan mengupload dokumen pendukung jika diperlukan.' }
+      ],
+      'jv': [
+        { question: 'cara gawe ktp', answer: 'Kanggo nggawe KTP anyar, mangga pilih opsi "Nggawe Dokumen Anyar" ing dashboard, banjur pilih "Kartu Tanda Penduduk". Isi formulir sing muncul lan upload dokumen sing dibutuhake.' },
+        { question: 'lali sandi', answer: 'Yen lali sandi, sampeyan bisa klik "Lali Sandi" ing kaca login. Lebokna email utawa NIK sampeyan, lan kita bakal ngirim link reset sandi menyang email sampeyan.' },
+        { question: 'status dokumen', answer: 'Kanggo mriksa status dokumen, bukak bagean "Dokumen Kula" ing dashboard. Status bakal nuduhake apa dokumen ing proses, rampung, utawa ana masalah.' },
+        { question: 'nganyari data', answer: 'Kanggo nganyari data, klik "Nganyari Profil" ing dashboard. Sampeyan bisa ngganti informasi pribadi lan ngunggah dokumen pendukung yen dibutuhake.' }
+      ],
+      'su': [
+        { question: 'cara nyieun ktp', answer: 'Pikeun nyieun KTP anyar, mangga pilih opsi "Jieun Dokumen Anyar" di dashboard, teras pilih "Kartu Tanda Penduduk". Eusian formulir anu muncul sareng unggah dokumen anu diperyogikeun.' },
+        { question: 'poho kata sandi', answer: 'Upami poho kata sandi, anjeun tiasa klik "Poho Kata Sandi" di halaman login. Lebetkeun email atawa NIK anjeun, sareng kami bakal ngirim link reset kata sandi ka email anjeun.' },
+        { question: 'status dokumen', answer: 'Pikeun mariksa status dokumen, buka bagian "Dokumen Abdi" di dashboard. Status bakal nunjukkeun naha dokumen dina prosés, réngsé, atanapi aya masalah.' },
+        { question: 'pembaruan data', answer: 'Pikeun ngapdet data, klik "Pembaruan Profil" di dashboard. Anjeun tiasa ngarobih inpormasi pribadi sareng ngunggah dokumen pendukung upami diperyogikeun.' }
+      ]
+    };
+
+    // Fungsi untuk menampilkan dokumen pengguna
+    function displayUserDocuments() {
+      const documentCardsContainer = document.getElementById('document-cards');
+      documentCardsContainer.innerHTML = '';
+
+      if (Object.keys(userDocuments).length === 0) {
+        const noDoc = document.createElement('p');
+        noDoc.className = 'no-document';
+        noDoc.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Anda belum memiliki dokumen' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Sampeyan durung duwe dokumen' : 'Anjeun teu acan gaduh dokumen');
+        documentCardsContainer.appendChild(noDoc);
+        return;
+      }
+
+      for (const [docType, docData] of Object.entries(userDocuments)) {
+        const docCard = document.createElement('div');
+        docCard.className = 'document-card';
+        
+        const docName = allDocumentTypes.find(doc => doc.type === docType).name;
+        
+        docCard.innerHTML = `
+          <div class="document-icon">${docData.icon}</div>
+          <h4>${docType}</h4>
+          <p><strong>${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Tanggal Terbit' : 
+            (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Tanggal Terbit' : 'Tanggal Terbit')}:</strong> ${docData.date}</p>
+          <p><strong>${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Status' : 
+            (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Status' : 'Status')}:</strong> ${docData.status}</p>
+          <div class="document-actions">
+            <button class="btn-dokumen" onclick="viewDocument('${docType}')">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Lihat Dokumen' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Deleng Dokumen' : 'Tingali Dokumen')}</button>
+            <button class="btn-dokumen" onclick="updateDocument('${docType}')">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Perbarui Dokumen' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Nganyari Dokumen' : 'Pembaruan Dokumen')}</button>
+          </div>
+        `;
+        
+        documentCardsContainer.appendChild(docCard);
+      }
+    }
+
+    // Fungsi untuk menampilkan opsi pembuatan dokumen baru
+    function displayCreateDocumentOptions() {
+      const optionsContainer = document.getElementById('create-document-options');
+      optionsContainer.innerHTML = '';
+
+      // Filter dokumen yang belum dimiliki
+      const availableDocuments = allDocumentTypes.filter(doc => !userDocuments[doc.type]);
+
+      if (availableDocuments.length === 0) {
+        const noOption = document.createElement('p');
+        noOption.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Anda sudah memiliki semua dokumen yang tersedia' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Sampeyan wis duwe kabeh dokumen sing kasedhiya' : 'Anjeun parantos gaduh sadaya dokumen anu sayogi');
+        optionsContainer.appendChild(noOption);
+        return;
+      }
+
+      availableDocuments.forEach(doc => {
+        const button = document.createElement('button');
+        button.className = 'create-document-btn';
+        button.innerHTML = `${doc.icon} ${doc.name}`;
+        button.onclick = function() { showDocumentForm(doc.type); };
+        optionsContainer.appendChild(button);
+      });
+    }
+
+    // Fungsi untuk menampilkan form dokumen
+    function showDocumentForm(docType) {
+      hideAllPages();
+      
+      if (docType === 'KTP') {
+        document.getElementById('ktp-form-box').classList.remove('hidden');
+        initializeSignaturePad('ktp');
+      } else if (docType === 'KK') {
+        document.getElementById('kk-form-box').classList.remove('hidden');
+        initializeKKForm();
+        initializeSignaturePad('kk');
+      } else if (docType === 'AKTA') {
+        document.getElementById('akta-form-box').classList.remove('hidden');
+        initializeSignaturePad('akta');
+      } else if (docType === 'AKTA PRIBADI') {
+        document.getElementById('akta-form-box').classList.remove('hidden');
+        initializeSignaturePad('akta');
+      }
+    }
+
+    // Fungsi untuk inisialisasi signature pad
+    function initializeSignaturePad(type) {
+      const canvas = document.getElementById(`${type}-signature-pad`).querySelector('canvas');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      
+      signaturePads[type] = new SignaturePad(canvas, {
+        backgroundColor: 'rgb(255, 255, 255)',
+        penColor: 'rgb(0, 0, 0)'
+      });
+    }
+
+    // Fungsi untuk menghapus tanda tangan
+    function clearSignature(type) {
+      if (signaturePads[type]) {
+        signaturePads[type].clear();
+      }
+    }
+
+    // Fungsi untuk inisialisasi form KK
+    function initializeKKForm() {
+      const anggotaList = document.getElementById('kk-anggota-list');
+      anggotaList.innerHTML = '';
+      
+      // Tambahkan kepala keluarga sebagai anggota pertama
+      addAnggotaKeluarga(true);
+    }
+
+    // Fungsi untuk menambahkan anggota keluarga
+    let anggotaCounter = 1;
+    function addAnggotaKeluarga(isKepala = false) {
+      const anggotaList = document.getElementById('kk-anggota-list');
+      const anggotaDiv = document.createElement('div');
+      anggotaDiv.className = 'form-group anggota-item';
+      anggotaDiv.style.border = '1px solid var(--input-border)';
+      anggotaDiv.style.padding = '1rem';
+      anggotaDiv.style.borderRadius = '8px';
+      anggotaDiv.style.marginBottom = '1rem';
+      
+      const title = isKepala ? 
+        (document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Kepala Keluarga' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Kepala Keluarga' : 'Kepala Kulawarga')) : 
+        (document.querySelector('[data-lang="id"]').style.display !== 'none' ? `Anggota Keluarga ${anggotaCounter}` : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? `Anggota Keluarga ${anggotaCounter}` : `Anggota Kulawarga ${anggotaCounter}`));
+      
+      anggotaDiv.innerHTML = `
+        <h4>${title}</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="kk-anggota-nik-${anggotaCounter}">NIK</label>
+            <input type="text" id="kk-anggota-nik-${anggotaCounter}" required ${isKepala ? 'value="3273010101010001" readonly' : ''}>
+          </div>
+          <div class="form-group">
+            <label for="kk-anggota-nama-${anggotaCounter}">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Nama Lengkap' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Jeneng Lengkap' : 'Nami Lengkep')}</label>
+            <input type="text" id="kk-anggota-nama-${anggotaCounter}" required ${isKepala ? 'value="Faqih Almuwafaq"' : ''}>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="kk-anggota-jenis-kelamin-${anggotaCounter}">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Jenis Kelamin' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Jenis Kelamin' : 'Jenis Kelamin')}</label>
+            <select id="kk-anggota-jenis-kelamin-${anggotaCounter}" required>
+              <option value="Laki-laki" ${isKepala ? 'selected' : ''}>${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Laki-laki' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Lanang' : 'Lalaki')}</option>
+              <option value="Perempuan">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Perempuan' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Wadon' : 'Awewe')}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="kk-anggota-tempat-lahir-${anggotaCounter}">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Tempat Lahir' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Papan Kelairan' : 'Tempat Kalahiran')}</label>
+            <input type="text" id="kk-anggota-tempat-lahir-${anggotaCounter}" required ${isKepala ? 'value="Jakarta"' : ''}>
+          </div>
+          <div class="form-group">
+            <label for="kk-anggota-tanggal-lahir-${anggotaCounter}">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Tanggal Lahir' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Tanggal Kelairan' : 'Tanggal Kalahiran')}</label>
+            <input type="date" id="kk-anggota-tanggal-lahir-${anggotaCounter}" required ${isKepala ? 'value="1990-01-01"' : ''}>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="kk-anggota-agama-${anggotaCounter}">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Agama' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Agama' : 'Agama')}</label>
+            <select id="kk-anggota-agama-${anggotaCounter}" required>
+              <option value="Islam" ${isKepala ? 'selected' : ''}>Islam</option>
+              <option value="Kristen">Kristen</option>
+              <option value="Katolik">Katolik</option>
+              <option value="Hindu">Hindu</option>
+              <option value="Buddha">Buddha</option>
+              <option value="Konghucu">Konghucu</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="kk-anggota-pendidikan-${anggotaCounter}">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Pendidikan' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Pendidikan' : 'Pendidikan')}</label>
+            <select id="kk-anggota-pendidikan-${anggotaCounter}" required>
+              <option value="Tidak Sekolah">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Tidak Sekolah' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Ora Sekolah' : 'Teu Sakola')}</option>
+              <option value="SD">SD</option>
+              <option value="SMP">SMP</option>
+              <option value="SMA" ${isKepala ? 'selected' : ''}>SMA</option>
+              <option value="D1-D3">D1-D3</option>
+              <option value="S1">S1</option>
+              <option value="S2">S2</option>
+              <option value="S3">S3</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="kk-anggota-pekerjaan-${anggotaCounter}">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Pekerjaan' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Pagawean' : 'Pagawéan')}</label>
+            <input type="text" id="kk-anggota-pekerjaan-${anggotaCounter}" required ${isKepala ? 'value="Pegawai Swasta"' : ''}>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="kk-anggota-status-perkawinan-${anggotaCounter}">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Status Perkawinan' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Status Perkawinan' : 'Status Perkawinan')}</label>
+            <select id="kk-anggota-status-perkawinan-${anggotaCounter}" required>
+              <option value="Belum Kawin">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Belum Kawin' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Durung Kawin' : 'Tacan Kawin')}</option>
+              <option value="Kawin" ${isKepala ? 'selected' : ''}>${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Kawin' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Kawin' : 'Kawin')}</option>
+              <option value="Cerai Hidup">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Cerai Hidup' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Cerai Hidup' : 'Cerai Hidup')}</option>
+              <option value="Cerai Mati">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Cerai Mati' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Cerai Mati' : 'Cerai Mati')}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="kk-anggota-status-hubungan-${anggotaCounter}">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Status Hubungan' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Status Hubungan' : 'Status Hubungan')}</label>
+            <select id="kk-anggota-status-hubungan-${anggotaCounter}" required>
+              <option value="Kepala Keluarga" ${isKepala ? 'selected' : ''}>${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Kepala Keluarga' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Kepala Keluarga' : 'Kepala Kulawarga')}</option>
+              <option value="Suami">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Suami' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Suami' : 'Salaki')}</option>
+              <option value="Istri">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Istri' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Bojo' : 'Pamajikan')}</option>
+              <option value="Anak">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Anak' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Anak' : 'Anak')}</option>
+              <option value="Orang Tua">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Orang Tua' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Wong Tua' : 'Kolot')}</option>
+              <option value="Lainnya">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Lainnya' : 
+                (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Liyane' : 'Lainna')}</option>
+            </select>
+          </div>
+        </div>
+        ${!isKepala ? `<button type="button" class="btn-kembali" onclick="this.parentNode.remove()" style="margin-top: 0.5rem;">${document.querySelector('[data-lang="id"]').style.display !== 'none' ? 'Hapus Anggota' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 'Busek Anggota' : 'Hapus Anggota')}</button>` : ''}
+      `;
+      anggotaList.appendChild(anggotaDiv);
+      if (!isKepala) anggotaCounter++;
+    }
+
+    // Fungsi untuk preview gambar yang diupload
+    function previewImage(input, previewId) {
+      const preview = document.getElementById(previewId);
+      const file = input.files[0];
+      
+      if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Fungsi untuk preview media feedback
+    function previewFeedbackMedia(input) {
+      const preview = document.getElementById('feedback-preview');
+      const audioPlayer = document.getElementById('feedback-audio');
+      const file = input.files[0];
+      
+      if (file) {
+        if (file.type.startsWith('image/')) {
+          preview.style.display = 'block';
+          audioPlayer.classList.add('hidden');
+          
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            preview.src = e.target.result;
+          }
+          reader.readAsDataURL(file);
+        } else if (file.type.startsWith('audio/')) {
+          preview.style.display = 'none';
+          audioPlayer.classList.remove('hidden');
+          
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            audioPlayer.src = e.target.result;
+          }
+          reader.readAsDataURL(file);
+        }
+      }
+    }
+
+    // Fungsi untuk merekam audio
+    function recordAudio() {
+      alert(document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Fitur rekam audio akan diaktifkan di sini (simulasi)' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Fitur rekam audio bakal diaktifake ing kene (simulasi)' : 'Fitur rekam audio bakal diaktipkeun di dieu (simulasi)'));
+    }
+
+    // Fungsi untuk memilih jenis feedback
+    function selectFeedbackType(element, type) {
+      document.querySelectorAll('.feedback-option').forEach(opt => {
+        opt.classList.remove('active');
+      });
+      element.classList.add('active');
+      document.getElementById('feedback-type').value = type;
+    }
+
+    // Fungsi untuk melihat dokumen
+    function viewDocument(docType) {
+      hideAllPages();
+      document.getElementById('document-view-box').classList.remove('hidden');
+      
+      const docData = userDocuments[docType];
+      const docName = allDocumentTypes.find(doc => doc.type === docType).name;
+      
+      document.getElementById('document-view-title').textContent = docName;
+      document.getElementById('document-view-image').src = docData.image;
+      
+      const statusElement = document.getElementById('document-view-status');
+      if (docData.status === 'Dalam Proses') {
+        statusElement.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Dokumen masih dalam proses. Harap tunggu 3-5 hari kerja.' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Dokumen isih ing proses. Monggo ditunggu 3-5 dina kerja.' : 'Dokumen masih dina prosés. Punten antosan 3-5 poé kerja.');
+      } else {
+        statusElement.textContent = '';
+      }
+    }
+
+    // Fungsi untuk mengunduh dokumen
+    function downloadDocument() {
+      alert(document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Dokumen akan diunduh (simulasi)' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Dokumen bakal diunduh (simulasi)' : 'Dokumen bakal diunduh (simulasi)'));
+    }
+
+    // Fungsi untuk toggle theme
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    // Fungsi untuk menyesuaikan ukuran font
+    function adjustFontSize(change) {
+      const currentSize = parseFloat(getComputedStyle(document.body).fontSize);
+      const newSize = currentSize + change;
+      if (newSize >= 12 && newSize <= 24) {
+        document.body.style.fontSize = `${newSize}px`;
+        localStorage.setItem('fontSize', newSize);
+      }
+    }
+
+    // Fungsi untuk mengganti bahasa
+    function changeLanguage() {
+      const language = document.getElementById('bahasa').value;
+      
+      // Sembunyikan semua elemen bahasa
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        el.classList.add('hidden');
+      });
+      
+      // Tampilkan elemen dengan bahasa yang dipilih
+      document.querySelectorAll(`[data-lang="${language}"]`).forEach(el => {
+        el.classList.remove('hidden');
+      });
+      
+      // Simpan preferensi bahasa
+      localStorage.setItem('language', language);
+    }
+
+    // Fungsi text-to-speech
+    function speakText() {
+      const activeBox = document.querySelector('.container-box:not(.hidden)');
+      const text = activeBox.innerText;
+      const speech = new SpeechSynthesisUtterance(text);
+      
+      // Set bahasa berdasarkan pilihan
+      const language = document.getElementById('bahasa').value;
+      speech.lang = language === "id" ? "id-ID" : 
+                   (language === "jv" ? "jv-ID" : "su-ID");
+      
+      window.speechSynthesis.speak(speech);
+    }
+
+    function stopSpeaking() {
+      window.speechSynthesis.cancel();
+    }
+
+    // Fungsi navigasi antar halaman
+    function goToWelcomePage() {
+      hideAllPages();
+      document.getElementById('welcome-box').classList.remove('hidden');
+    }
+
+    function goToAccountPage() {
+      hideAllPages();
+      document.getElementById('account-box').classList.remove('hidden');
+    }
+
+    function goToLoginPage() {
+      hideAllPages();
+      document.getElementById('login-box').classList.remove('hidden');
+    }
+
+    function goToRegisterPage() {
+      hideAllPages();
+      document.getElementById('register-box').classList.remove('hidden');
+    }
+
+    function goToForgotPasswordPage() {
+      hideAllPages();
+      document.getElementById('forgot-box').classList.remove('hidden');
+    }
+
+    function goToDashboard() {
+      hideAllPages();
+      document.getElementById('dashboard-box').classList.remove('hidden');
+      displayUserDocuments();
+      displayCreateDocumentOptions();
+    }
+
+    function updateProfile() {
+      hideAllPages();
+      document.getElementById('profile-form-box').classList.remove('hidden');
+    }
+
+    function showFeedbackPage() {
+      hideAllPages();
+      document.getElementById('feedback-box').classList.remove('hidden');
+    }
+
+    function hideAllPages() {
+      document.querySelectorAll('.container-box').forEach(box => {
+        box.classList.add('hidden');
+      });
+    }
+
+    // Fungsi fingerprint (simulasi)
+    function loginWithFingerprint() {
+      document.getElementById('login-form').classList.add('hidden');
+      const loginBox = document.getElementById('login-box');
+      const message = document.createElement('div');
+      message.className = 'success-message';
+      message.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Silakan letakkan jari Anda pada sensor fingerprint...' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Mangga lebokna driji sampeyan ing sensor fingerprint...' : 'Punten lebetkeun ramo anjeun dina sensor fingerprint...');
+      loginBox.insertBefore(message, loginBox.querySelector('.fingerprint-option'));
+      
+      // Simulasi proses fingerprint
+      setTimeout(() => {
+        message.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Autentikasi berhasil! Mengarahkan ke dashboard...' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Autentikasi sukses! Ngarepake menyang dashboard...' : 'Auténtikasi suksés! Nuju ka dashboard...');
+        setTimeout(() => {
+          goToDashboard();
+        }, 1500);
+      }, 2000);
+    }
+
+    // Fungsi untuk mendaftarkan fingerprint
+    function registerFingerprint() {
+      const fingerprintOption = document.querySelector('.fingerprint-option');
+      const message = document.createElement('div');
+      message.className = 'success-message';
+      message.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Silakan letakkan jari Anda pada sensor fingerprint...' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Mangga lebokna driji sampeyan ing sensor fingerprint...' : 'Punten lebetkeun ramo anjeun dina sensor fingerprint...');
+      fingerprintOption.parentNode.insertBefore(message, fingerprintOption.nextSibling);
+      
+      // Simulasi proses fingerprint
+      setTimeout(() => {
+        message.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Pendaftaran sidik jari berhasil!' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Pendaftaran sidik jari sukses!' : 'Pendaptaran sidik jari suksés!');
+        document.getElementById('fingerprint-registered').value = "true";
+      }, 2000);
+    }
+
+    // Fungsi logout
+    function logout() {
+      goToWelcomePage();
+    }
+
+    // Fungsi untuk toggle chatbot
+    function toggleChatbot() {
+      const chatbot = document.getElementById('chatbot-container');
+      chatbot.classList.toggle('open');
+    }
+
+    // Fungsi untuk mengirim pesan chatbot
+    function sendChatbotMessage() {
+      const language = document.getElementById('bahasa').value;
+      const inputField = language === 'id' ? 'chatbot-input' : 
+                       (language === 'jv' ? 'chatbot-input-jv' : 'chatbot-input-su');
+      const input = document.getElementById(inputField);
+      const message = input.value.trim();
+      
+      if (message) {
+        // Tambahkan pesan pengguna
+        const messagesContainer = document.getElementById('chatbot-messages');
+        const userMessage = document.createElement('div');
+        userMessage.className = 'chatbot-message user';
+        userMessage.textContent = message;
+        messagesContainer.appendChild(userMessage);
+        
+        // Kosongkan input
+        input.value = '';
+        
+        // Simulasi pemrosesan
+        setTimeout(() => {
+          // Cari jawaban yang sesuai
+          let answer = chatbotData[language].find(item => 
+            message.toLowerCase().includes(item.question.toLowerCase()))?.answer;
+          
+          if (!answer) {
+            answer = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+              'Maaf, saya tidak mengerti pertanyaan Anda. Silakan coba tanyakan hal lain.' : 
+              (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+              'Nuwun sewu, aku ora ngerti pitakonan sampeyan. Mangga coba takon bab liyane.' : 'Hapunten, abdi henteu ngartos patarosan anjeun. Punten cobi naroskeun hal sanés.');
+          }
+          
+          // Tambahkan pesan bot
+          const botMessage = document.createElement('div');
+          botMessage.className = `chatbot-message bot ${language !== 'id' ? 'hidden' : ''}`;
+          botMessage.setAttribute('data-lang', language);
+          botMessage.textContent = answer;
+          messagesContainer.appendChild(botMessage);
+          
+          // Scroll ke bawah
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 1000);
+      }
+    }
+
+    // Fungsi untuk validasi form login
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let isValid = true;
+      
+      const birthdate = document.getElementById('birthdate');
+      const password = document.getElementById('password');
+      const otp = document.getElementById('otp');
+      const birthdateError = document.getElementById('birthdate-error');
+      const passwordError = document.getElementById('password-error');
+      const otpError = document.getElementById('otp-error');
+      
+      // Reset error messages
+      birthdateError.style.display = 'none';
+      passwordError.style.display = 'none';
+      otpError.style.display = 'none';
+      
+      // Validasi tanggal lahir
+      if (!birthdate.value) {
+        birthdateError.style.display = 'block';
+        isValid = false;
+      }
+  
+      // Validasi password
+      if (!password.value) {
+        if (document.querySelector('[data-lang="id"]').style.display !== 'none') {
+          passwordError.textContent = 'Password harus diisi';
+        } else if (document.querySelector('[data-lang="jv"]').style.display !== 'none') {
+          passwordError.textContent = 'Sandi kudu diisi';
+        } else {
+          passwordError.textContent = 'Kata sandi kedah diisi';
+        }
+        passwordError.style.display = 'block';
+        isValid = false;
+      } else if (password.value.length < 6) {
+        if (document.querySelector('[data-lang="id"]').style.display !== 'none') {
+          passwordError.textContent = 'Password harus minimal 6 karakter';
+        } else if (document.querySelector('[data-lang="jv"]').style.display !== 'none') {
+          passwordError.textContent = 'Sandi kudu minimal 6 karakter';
+        } else {
+          passwordError.textContent = 'Kata sandi kedah minimal 6 karakter';
+        }
+        passwordError.style.display = 'block';
+        isValid = false;
+      }
+      
+      if (isValid) {
+        // Simulasi proses login
+        const loading = document.createElement('div');
+        loading.className = 'success-message';
+        loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Memproses login...' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Ngolah login...' : 'Ngolah login...');
+        this.parentNode.insertBefore(loading, this.nextSibling);
+        
+        setTimeout(() => {
+          loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+            'Login berhasil! Mengarahkan ke dashboard...' : 
+            (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+            'Login sukses! Ngarepake menyang dashboard...' : 'Login suksés! Nuju ka dashboard...');
+          setTimeout(() => {
+            goToDashboard();
+          }, 1500);
+        }, 2000);
+      }
+    });
+
+    // Fungsi untuk validasi form registrasi
+    document.getElementById('register-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Validasi fingerprint
+      if (document.getElementById('fingerprint-registered').value !== "true") {
+        alert(document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Harap daftarkan sidik jari terlebih dahulu' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Mangga ndhaftar sidik jari rumiyin' : 'Punten pendaptaran sidik jari heula'));
+        return;
+      }
+      
+      // Simulasi proses registrasi
+      const loading = document.createElement('div');
+      loading.className = 'success-message';
+      loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Membuat akun baru...' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Nggawe akun anyar...' : 'Nyieun akun anyar...');
+      this.parentNode.insertBefore(loading, this.nextSibling);
+      
+      setTimeout(() => {
+        loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Registrasi berhasil! Silakan login dengan akun Anda.' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Registrasi sukses! Mangga login nganggo akun sampeyan.' : 'Pendaptaran suksés! Punten login nganggo akun anjeun.');
+        setTimeout(() => {
+          goToLoginPage();
+        }, 1500);
+      }, 2000);
+    });
+
+    // Fungsi untuk form lupa password
+    document.getElementById('forgot-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Simulasi proses lupa password
+      const loading = document.createElement('div');
+      loading.className = 'success-message';
+      loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Mengirim link reset password...' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Ngirim link reset sandi...' : 'Ngirim link reset kata sandi...');
+      this.parentNode.insertBefore(loading, this.nextSibling);
+      
+      setTimeout(() => {
+        loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Link reset password telah dikirim ke email Anda.' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Link reset sandi wis dikirim menyang email sampeyan.' : 'Link reset kata sandi parantos dikirim ka email anjeun.');
+      }, 2000);
+    });
+
+    // Fungsi untuk form KTP
+    document.getElementById('ktp-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Validasi tanda tangan
+      if (signaturePads.ktp.isEmpty()) {
+        alert(document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Harap berikan tanda tangan digital' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Mangga wenehi tandha tangan digital' : 'Punten pasihan tanda tangan digital'));
+        return;
+      }
+      
+      // Simulasi proses pembuatan KTP
+      const loading = document.createElement('div');
+      loading.className = 'success-message';
+      loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Mengajukan pembuatan KTP...' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Ngajokake pembuatan KTP...' : 'Ngajukeun pembuatan KTP...');
+      this.parentNode.insertBefore(loading, this.nextSibling);
+      
+      setTimeout(() => {
+        loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Pengajuan KTP berhasil! Dokumen akan diproses dalam 3-5 hari kerja.' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Pengajuan KTP sukses! Dokumen bakal diproses ing 3-5 dina kerja.' : 'Pengajuan KTP suksés! Dokumen bakal diprosés dina 3-5 poé kerja.');
+        
+        // Tambahkan KTP ke koleksi dokumen pengguna
+        userDocuments['KTP'] = {
+          icon: '🆔',
+          image: 'https://png.pngtree.com/png-clipart/20230527/original/pngtree-indonesian-identity-card-illustration-png-image_9171687.png',
+          date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+          status: 'Dalam Proses'
+        };
+        
+        // Kembali ke dashboard setelah 3 detik
+        setTimeout(() => {
+          goToDashboard();
+        }, 3000);
+      }, 2000);
+    });
+
+    // Fungsi untuk form KK
+    document.getElementById('kk-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Validasi tanda tangan
+      if (signaturePads.kk.isEmpty()) {
+        alert(document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Harap berikan tanda tangan digital' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Mangga wenehi tandha tangan digital' : 'Punten pasihan tanda tangan digital'));
+        return;
+      }
+      
+      // Simulasi proses pembuatan KK
+      const loading = document.createElement('div');
+      loading.className = 'success-message';
+      loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Mengajukan pembuatan Kartu Keluarga...' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Ngajokake pembuatan Kartu Keluarga...' : 'Ngajukeun pembuatan Kartu Kulawarga...');
+      this.parentNode.insertBefore(loading, this.nextSibling);
+      
+      setTimeout(() => {
+        loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Pengajuan Kartu Keluarga berhasil! Dokumen akan diproses dalam 5-7 hari kerja.' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Pengajuan Kartu Keluarga sukses! Dokumen bakal diproses ing 5-7 dina kerja.' : 'Pengajuan Kartu Kulawarga suksés! Dokumen bakal diprosés dina 5-7 poé kerja.');
+        
+        // Tambahkan KK ke koleksi dokumen pengguna
+        userDocuments['KK'] = {
+          icon: '🏠',
+          image: 'https://png.pngtree.com/png-clipart/20230916/original/pngtree-indonesian-family-card-vector-png-image_12257531.png',
+          date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+          status: 'Dalam Proses'
+        };
+        
+        // Kembali ke dashboard setelah 3 detik
+        setTimeout(() => {
+          goToDashboard();
+        }, 3000);
+      }, 2000);
+    });
+
+    // Fungsi untuk form Akta
+    document.getElementById('akta-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Validasi tanda tangan
+      if (signaturePads.akta.isEmpty()) {
+        alert(document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Harap berikan tanda tangan digital' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Mangga wenehi tandha tangan digital' : 'Punten pasihan tanda tangan digital'));
+        return;
+      }
+      
+      // Simulasi proses pembuatan Akta
+      const loading = document.createElement('div');
+      loading.className = 'success-message';
+      loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Mengajukan pembuatan Akta Kelahiran...' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Ngajokake pembuatan Akta Kelairan...' : 'Ngajukeun pembuatan Akta Kalahiran...');
+      this.parentNode.insertBefore(loading, this.nextSibling);
+      
+      setTimeout(() => {
+        loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Pengajuan Akta Kelahiran berhasil! Dokumen akan diproses dalam 7-10 hari kerja.' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Pengajuan Akta Kelairan sukses! Dokumen bakal diproses ing 7-10 dina kerja.' : 'Pengajuan Akta Kalahiran suksés! Dokumen bakal diprosés dina 7-10 poé kerja.');
+        
+        // Tambahkan Akta ke koleksi dokumen pengguna
+        userDocuments['AKTA'] = {
+          icon: '👶',
+          // image: 'https://disdukcapil.acehbaratkab.go.id/media/2020.06/birth_certificate.jpg',
+          date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+          status: 'Dalam Proses'
+        };
+        
+        // Kembali ke dashboard setelah 3 detik
+        setTimeout(() => {
+          goToDashboard();
+        }, 3000);
+      }, 2000);
+    });
+
+    // Fungsi untuk form profil
+    document.getElementById('profile-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Validasi password jika diisi
+      const newPassword = document.getElementById('profile-update-password').value;
+      const confirmPassword = document.getElementById('profile-update-confirm-password').value;
+      
+      if (newPassword || confirmPassword) {
+        if (newPassword !== confirmPassword) {
+          alert(document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+            'Password baru dan konfirmasi password tidak cocok' : 
+            (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+            'Sandi anyar lan konfirmasi sandi ora cocog' : 'Kata sandi anyar sareng konfirmasi kata sandi teu cocog'));
+          return;
+        }
+        
+        if (newPassword.length < 6) {
+          alert(document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+            'Password baru harus minimal 6 karakter' : 
+            (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+            'Sandi anyar kudu minimal 6 karakter' : 'Kata sandi anyar kedah minimal 6 karakter'));
+          return;
+        }
+      }
+      
+      // Simulasi proses update profil
+      const loading = document.createElement('div');
+      loading.className = 'success-message';
+      loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Memperbarui profil...' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Nganyari profil...' : 'Ngapdet profil...');
+      this.parentNode.insertBefore(loading, this.nextSibling);
+      
+      setTimeout(() => {
+        loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Profil berhasil diperbarui!' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Profil sukses diowahi!' : 'Profil suksés diropéa!');
+        
+        // Update data profil di dashboard
+        document.getElementById('profile-name').textContent = document.getElementById('profile-update-nama').value;
+        document.getElementById('profile-phone').textContent = document.getElementById('profile-update-phone').value;
+        document.getElementById('profile-address').textContent = document.getElementById('profile-update-alamat').value;
+        
+        // Update foto profil jika diupload
+        const profilePhoto = document.getElementById('profile-photo');
+        const profilePreview = document.getElementById('profile-preview');
+        
+        if (profilePreview.style.display !== 'none') {
+          profilePhoto.src = profilePreview.src;
+        }
+        
+        // Kembali ke dashboard setelah 2 detik
+        setTimeout(() => {
+          goToDashboard();
+        }, 2000);
+      }, 1500);
+    });
+
+    // Fungsi untuk form feedback
+    document.getElementById('feedback-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Simulasi proses pengiriman feedback
+      const loading = document.createElement('div');
+      loading.className = 'success-message';
+      loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+        'Mengirim masukan...' : 
+        (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+        'Ngirim masukan...' : 'Ngirim masukan...');
+      this.parentNode.insertBefore(loading, this.nextSibling);
+      
+      setTimeout(() => {
+        loading.textContent = document.querySelector('[data-lang="id"]').style.display !== 'none' ? 
+          'Terima kasih atas masukan Anda!' : 
+          (document.querySelector('[data-lang="jv"]').style.display !== 'none' ? 
+          'Matur nuwun kanggo masukan sampeyan!' : 'Hatur nuhun pikeun masukan anjeun!');
+        
+        // Kembali ke dashboard setelah 2 detik
+        setTimeout(() => {
+          goToDashboard();
+        }, 2000);
+      }, 1500);
+    });
+
+    // Fungsi untuk dokumen
+    function updateDocument(docType) {
+      showDocumentForm(docType);
+    }
+
+    // Cek preferensi pengguna saat memuat halaman
+    window.addEventListener('DOMContentLoaded', () => {
+      // Cek dark mode
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      }
+      
+      // Cek ukuran font
+      const savedFontSize = localStorage.getItem('fontSize');
+      if (savedFontSize) {
+        document.body.style.fontSize = `${savedFontSize}px`;
+      }
+      
+      // Cek bahasa
+      const savedLanguage = localStorage.getItem('language') || 'id';
+      document.getElementById('bahasa').value = savedLanguage;
+      changeLanguage();
+      
+      // Inisialisasi chatbot
+      toggleChatbot();
+    });
+
+  </script>
+</body>
+</html> 
