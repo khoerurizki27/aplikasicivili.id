@@ -1686,10 +1686,10 @@
 
     // Semua jenis dokumen yang tersedia
     const allDocumentTypes = [
-      { type: 'KTP', name: 'Kartu Tanda Penduduk', icon: '🪪' },
-      { type: 'KK', name: 'Kartu Keluarga', icon: '🏠' },
-      { type: 'AKTA KELAHIRAN', name: 'Akta Kelahiran', icon: '👶' },
-      { type: 'AKTA PRIBADI', name: 'Akta Pribadi', icon: '👤' }
+      { type: 'KTP', name: 'Kartu Tanda Penduduk', icon: '' },
+      { type: 'KK', name: 'Kartu Keluarga', icon: '' },
+      { type: 'AKTA KELAHIRAN', name: 'Akta Kelahiran', icon: '' },
+      { type: 'AKTA PRIBADI', name: 'Akta Pribadi', icon: '' }
     ];
 
     // Signature pads
@@ -1800,7 +1800,7 @@
         document.getElementById('kk-form-box').classList.remove('hidden');
         initializeKKForm();
         initializeSignaturePad('kk');
-      } else if (docType === 'AKTA') {
+      } else if (docType === 'AKTA KELAHIRAN') {
         document.getElementById('akta-form-box').classList.remove('hidden');
         initializeSignaturePad('akta');
       } else if (docType === 'AKTA PRIBADI') {
